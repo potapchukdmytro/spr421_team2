@@ -2,42 +2,45 @@ import { Button, CloseButton, Heading, Input } from "@chakra-ui/react";
 import { Message } from "./Message";
 import { useState, useRef, useEffect } from "react";
 
-
 export const Chat = ({ messages, chatRoom, closeChat, sendMessage }) => {
-    const [message, setMessage] = useState("");
-    const messageEndRef = useRef();
+  const [message, setMessage] = useState("");
+  const messageEndRef = useRef();
 
-    useEffect(() =>{
-        messageEndRef.current.scrollIntoView();
-    }, [messages]);
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-    const onSendMessage = () => {
-        sendMessage(message);
-        setMessage("");
-    }
+  const onSendMessage = () => {
+    if (message.trim() === "") return;
+    sendMessage(message);
+    setMessage("");
+  };
 
+  return (
+    <div className="chat-wrapper">
+      <div className="chat-header">
+        <Heading size="md">{chatRoom}</Heading>
+        <CloseButton onClick={closeChat} />
+      </div>
 
-    return (
-    <div className="w-1/2 bg-white p-8 rouded shadow-lg">
-        <div className="flex flex-row justify-between mb-5">
-            <Heading size="lg">{chatRoom}</Heading>
-            <CloseButton onClick={closeChat} />
-        </div>
-        <div className="flex flex-col overflow-auto scroll-smoth h-96 gap-3 pb-3">
-            {messages.map((messageInfo, index) => (
-                <Message messageInfo={messageInfo} key={index} />
-            ))}
-            <span ref={messageEndRef}/>
-        </div>
-        <div className="flex gap-3">
-            <Input 
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Введіть повідомлення"
-            />
-            <Button colorScheme="blue" onClick={onSendMessage}>Відправити</Button>
-        </div>
+      <div className="chat-messages">
+        {messages.map((messageInfo, index) => (
+          <Message messageInfo={messageInfo} key={index} />
+        ))}
+        <span ref={messageEndRef} />
+      </div>
+
+      <div className="chat-input">
+        <Input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Введіть повідомлення"
+        />
+        <Button colorScheme="blue" onClick={onSendMessage}>
+          Відправити
+        </Button>
+      </div>
     </div>
-    );
+  );
 };

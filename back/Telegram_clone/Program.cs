@@ -1,4 +1,6 @@
 using Telegram_clone.Hubs;
+using Microsoft.EntityFrameworkCore;
+using Telegram_clone.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,14 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     var connection = builder.Configuration.GetConnectionString("Redis");
     options.Configuration = connection;
+});
+
+//DB_Context
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseSqlServer(connection);
 });
 
 builder.Services.AddSignalR();

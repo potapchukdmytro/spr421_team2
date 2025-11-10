@@ -15,7 +15,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseSqlServer(connection);
+    options.UseNpgsql(connection);
 });
 
 builder.Services.AddSignalR();

@@ -1,0 +1,17 @@
+services:
+  realtimechat.redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+
+
+  telegram_clone:
+    build:
+      context: ./telegram_clone   
+    container_name: telegram_clone
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - realtimechat.redis

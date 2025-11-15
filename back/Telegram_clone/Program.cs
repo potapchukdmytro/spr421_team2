@@ -11,12 +11,19 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 //DB_Context
-
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var connection = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseNpgsql(connection);
 });
+//Controllers
+builder.Services.AddControllers();
+
+//swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
 
 builder.Services.AddSignalR();
 
@@ -34,9 +41,20 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
 
 app.UseCors("AllowLocalhost");
 
 app.MapHub<ChatHub>("/tg");
+
+app.MapControllers();
 
 app.Run();

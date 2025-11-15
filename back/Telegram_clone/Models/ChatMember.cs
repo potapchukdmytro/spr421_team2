@@ -3,7 +3,7 @@
     public partial class ChatMember
     {
         public int Id { get; set; }
-        public DateTime JoinedAt { get; set; }
+        public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
 
         
         public int ChatId { get; set; }
